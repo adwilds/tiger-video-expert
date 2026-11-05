@@ -1,4 +1,4 @@
-# 全链路内容专家 · tiger-video-expert
+# 老虎AI全链路内容操盘手 · tiger-video-expert
 
 [![许可: CC BY-NC-SA 4.0](https://img.shields.io/badge/%E8%AE%B8%E5%8F%AF-CC%20BY--NC--SA%204.0-ef9421.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![GitHub](https://img.shields.io/badge/GitHub-adwilds%2Ftiger--video--expert-181717.svg)](https://github.com/adwilds/tiger-video-expert)

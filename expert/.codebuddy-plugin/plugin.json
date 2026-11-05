@@ -1,7 +1,7 @@
 {
   "name": "tiger-video-expert",
   "version": "1.0.0",
-  "description": "Short-video full-pipeline content operator: vets topics, structures scripts around a hook, routes each production stage to the right tool, and hands back an editable JianYing draft plus four-platform publish copy.",
+  "description": "End-to-end content operator for short video: vets topics, structures scripts around a hook, routes each production stage to the right tool, and hands back an editable JianYing draft plus four-platform publish copy.",
   "license": "CC-BY-NC-SA-4.0",
   "author": {
     "name": "adwilds",
@@ -21,12 +21,12 @@
   "agentName": "content-pipeline",
   "plugin": "tiger-video-expert",
   "displayName": {
-    "en": "TigerAI Full-Pipeline Content Expert",
-    "zh": "老虎AI全链路内容专家"
+    "en": "WorkTiger",
+    "zh": "WorkTiger"
   },
   "profession": {
-    "en": "Short-Video Content Operator",
-    "zh": "短视频内容操盘手"
+    "en": "End-to-End Content Operator",
+    "zh": "全链路内容操盘手"
   },
   "displayDescription": {
     "en": "Vets whether a topic is worth making, structures the script around a hook, routes each stage to the right tool, and hands back an editable draft instead of a finished file.",
