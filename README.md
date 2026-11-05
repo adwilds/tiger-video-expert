@@ -1,5 +1,8 @@
 # 全链路内容专家 · tiger-video-expert
 
+[![许可: CC BY-NC-SA 4.0](https://img.shields.io/badge/%E8%AE%B8%E5%8F%AF-CC%20BY--NC--SA%204.0-ef9421.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+[![GitHub](https://img.shields.io/badge/GitHub-adwilds%2Ftiger--video--expert-181717.svg)](https://github.com/adwilds/tiger-video-expert)
+
 把"拍完的素材"推进到**可编辑的剪映草稿 + 四个平台的发布稿**。
 包含一个技能（执行链路）和一个专家（判断与拆工序）。
 
@@ -92,21 +95,22 @@ python -m venv .venv
 
 ## 许可
 
+[![CC BY-NC-SA 4.0](https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+
 **CC BY-NC-SA 4.0**（署名 — 非商业性使用 — 相同方式共享 4.0 国际）
-全文见 [LICENSE](LICENSE)，源码文件头已标 `SPDX-License-Identifier: CC-BY-NC-SA-4.0`。
+全文见 [LICENSE](LICENSE)，条款落到具体行为的说明见 [NOTICE.md](NOTICE.md)，
+源码文件头已标 `SPDX-License-Identifier: CC-BY-NC-SA-4.0`。
 
-用的人要守三条：
+一句话版本：
 
-| 条款 | 意思 | 落到具体行为 |
-|---|---|---|
-| **BY 署名** | 必须标明出处和作者 | 转载、改编、二次分发都要附上作者名和许可链接，不能改个名字当自己的 |
-| **NC 非商业** | 不能拿来赚钱 | 不能售卖、不能做付费课程/付费社群/知识星球内容、不能用于接单交付、不能引流变现 |
-| **SA 相同方式共享** | 衍生作品必须同样开放 | 改了、扩了、包装成自己的工具，都得用同一许可开源，不能闭源打包卖 |
+- **署名**：转载、改编、二次分发都要标明作者和出处
+- **非商业**：不能卖、不能做付费课程/社群内容、不能用于接单交付、不能引流变现
+- **相同方式共享**：改了别人的衍生作品必须用同一许可开放，不能闭源打包卖
 
-**商用授权**：版权归作者本人所有，**我自己不受 NC 限制**，可以商用、可以授权他人商用。
-企业内训、代运营交付、二次售卖、贴牌集成等场景，请先联系作者取得书面授权。
+**商用授权**：版权归作者本人所有，**作者自己不受非商业条款限制**。企业内训、代运营交付、
+二次售卖、贴牌集成等场景请先联系作者取得书面授权（见 [NOTICE.md](NOTICE.md)）。
 
-**关于把这套许可用在软件上**：Creative Commons 官方不建议将 CC 许可用于源代码——它不含专利授权，
+**关于把 CC 许可用在软件上**：Creative Commons 官方不建议将 CC 许可用于源代码——它不含专利授权，
 与代码分发惯例也有摩擦。本仓库是「脚本工具 + 内容方法论 + 知识库」捆在一起的整体资产，
 统一一个许可比拆成两套更容易解释和遵守，所以整体采用 CC BY-NC-SA 4.0。
 第三方依赖（pyJianYingDraft / Apache-2.0、faster-whisper / MIT 等）各自沿用原许可，不受本条影响。
