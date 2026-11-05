@@ -1,32 +1,69 @@
 {
   "name": "tiger-video-expert",
-  "version": "0.3.0",
-  "description": "Tiger video expert: short-video full-pipeline content operator. Topic selection, script structure, production routing, editing-draft handoff.",
+  "version": "1.0.0",
+  "description": "Short-video full-pipeline content operator: vets topics, structures scripts around a hook, routes each production stage to the right tool, and hands back an editable JianYing draft plus four-platform publish copy.",
   "license": "CC-BY-NC-SA-4.0",
   "author": {
-    "name": "tiger-fde-os",
-    "email": "local@localhost"
+    "name": "adwilds",
+    "email": "317278727+adwilds@users.noreply.github.com"
   },
+  "homepage": "https://github.com/adwilds/tiger-video-expert",
+  "keywords": [
+    "short-video",
+    "content-strategy",
+    "jianying",
+    "video-script"
+  ],
   "agents": [
     "./agents/content-pipeline.md"
   ],
   "expertType": "agent",
   "agentName": "content-pipeline",
+  "plugin": "tiger-video-expert",
   "displayName": {
-    "en": "Full-Pipeline Content Operator",
-    "zh": "全链路内容专家"
+    "en": "TigerAI Full-Pipeline Content Expert",
+    "zh": "老虎AI全链路内容专家"
   },
   "profession": {
-    "en": "Short-Video Full-Pipeline Content Operator",
-    "zh": "短视频全链路内容操盘手"
+    "en": "Short-Video Content Operator",
+    "zh": "短视频内容操盘手"
   },
   "displayDescription": {
-    "en": "Runs short-video production end to end: decides whether a topic is worth making, structures the script around a hook, routes each stage to the right tool, and hands back an editable editing draft instead of a finished file.",
+    "en": "Vets whether a topic is worth making, structures the script around a hook, routes each stage to the right tool, and hands back an editable draft instead of a finished file.",
     "zh": "判断选题值不值得做，按钩子结构写脚本，把每道工序交给对的工具，交付可继续精修的剪辑草稿。"
   },
   "avatar": "avatars/expert.png",
-  "categoryId": "05-Marketing",
+  "categoryId": "06-ContentCreative",
   "defaultInitPrompt": {
-    "zh": "我手上有一个选题想法，帮我先判断值不值得做，再拆成能直接开工的工序。"
-  }
+    "zh": "我手上有一个选题想法，帮我先判断值不值得做，再拆成能直接开工的工序。",
+    "en": "I have a topic idea. First judge whether it is worth making, then break it into steps I can start today."
+  },
+  "tags": [
+    {
+      "en": "Topic Vetting",
+      "zh": "选题判断"
+    },
+    {
+      "en": "Short-Video Scripts",
+      "zh": "短视频脚本"
+    },
+    {
+      "en": "JianYing Drafts",
+      "zh": "剪映草稿"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "I have a topic idea. First judge whether it is worth making, then break it into steps I can start today.",
+      "zh": "我手上有一个选题想法，帮我先判断值不值得做，再拆成能直接开工的工序。"
+    },
+    {
+      "en": "The footage is already shot. Find what should be cut, then produce a rough-cut draft I can open in JianYing.",
+      "zh": "这条片子已经录完了，帮我找出该删的地方，生成能直接导入剪映的粗剪草稿。"
+    },
+    {
+      "en": "Write publish copy for this video for Douyin, Xiaohongshu, WeChat Channels and X, one version each.",
+      "zh": "帮我把这条视频的发布稿写出来，抖音、小红书、视频号、X 各一版。"
+    }
+  ]
 }
