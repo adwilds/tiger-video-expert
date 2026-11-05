@@ -2,6 +2,13 @@
 # Copyright (c) 2026 tiger-fde-os
 """一个入口，跑完整条链。
 
+    # 上游：我是谁 -> 情报 -> 选题
+    python pipeline.py profile   init
+    python pipeline.py intel     fetch   <项目目录>
+    python pipeline.py intel     rank    <项目目录>
+    python pipeline.py topic     pick    <项目目录> 1
+
+    # 下游：脚本 -> 素材 -> 粗剪 -> 草稿 -> 发布 -> 复盘
     python pipeline.py init      <项目目录> --name 第01期
     python pipeline.py doctor
     python pipeline.py ingest    <项目目录>
@@ -15,6 +22,9 @@
 
 每一步的产出固定在目录里，可以单独重跑，不需要从头再来。
 哪一步不通过就停在哪一步，不会带着坏数据往下走。
+
+上游三段的分工要说清：身份和情报是**输入**，选题是**判断**。
+脚本只做抓取、去重和可解释的打分排序，判断留给人和专家——机器算不出"反常识"。
 """
 
 from __future__ import annotations
@@ -33,6 +43,8 @@ import draft_compat                # noqa: E402
 
 # 项目目录里的固定分区
 DIRS = {
+    "intel": "00-intel",
+    "script": "01-script",
     "raw": "02-raw",
     "transcript": "03-transcript",
     "cut": "04-cut",
@@ -103,7 +115,22 @@ def cmd_init(args) -> int:
         if homes:
             print(f"  选它的原因: 这台机器上它装着 {homes[0]['drafts']} 个草稿，是剪映真正在读的库")
     print()
-    print("下一步：把主素材放到 02-raw/main.mp4，然后跑 pipeline.py ingest")
+
+    import profile as profile_mod
+    import intel as intel_mod
+    ws = intel_mod.workspace_of(root)
+    if not (ws / profile_mod.PROFILE_FILE).exists():
+        print("还没身份卡。这条链的第一步不是找选题，是说清「我是谁」：")
+        print(f"  python scripts/pipeline.py profile init --root {ws}")
+        print("  （身份卡是账号级的，放工作区根，不要塞进某一期里）")
+        print()
+    if not (root / DIRS["intel"] / intel_mod.TOPIC_CARD).exists():
+        print("链路：身份 -> 情报 -> 选题 -> 脚本 -> 素材 -> 粗剪 -> 草稿 -> 发布 -> 复盘")
+        print("  1. pipeline.py intel fetch .     抓情报")
+        print("  2. pipeline.py intel rank .      排候选（只是建议，不是结论）")
+        print("  3. pipeline.py topic pick . 1    落成选题卡，然后自己填四栏")
+        print()
+        print("选题定了再往下走：脚本放 01-script/，素材放 02-raw/main.mp4，然后 pipeline.py ingest .")
     return 0
 
 
@@ -458,6 +485,30 @@ POST_TEMPLATE = {
 }
 
 
+# ---------------------------------------------------------------- 上游三段
+
+def cmd_profile(args) -> int:
+    """身份卡：账号级，放工作区根。独立脚本，这里只转发。"""
+    import profile as profile_mod
+    return profile_mod.main(args.rest)
+
+
+def cmd_intel(args) -> int:
+    """情报：抓取、喂入、打分排序。"""
+    import intel as intel_mod
+    return intel_mod.main(args.rest)
+
+
+def cmd_topic(args) -> int:
+    """确定选题 = intel pick。单列一个命令，是因为"选题"是链路上的一站，不是子功能。"""
+    import intel as intel_mod
+    rest = list(args.rest)
+    if not rest or rest[0] != "pick":
+        # 两种写法都认：topic pick <目录> <序号>、topic <目录> <序号>
+        rest = ["pick"] + rest
+    return intel_mod.main(rest)
+
+
 # ---------------------------------------------------------------- metrics
 
 def cmd_metrics(args) -> int:
@@ -490,25 +541,44 @@ def cmd_status(args) -> int:
         return 1
     project = load_project(root)
 
+    import profile as profile_mod
+    import intel as intel_mod
+    ws = intel_mod.workspace_of(root)
+
+    def show(p: Path) -> str:
+        try:
+            return str(p.relative_to(root))
+        except ValueError:
+            return str(p)
+
+    # (标签, 路径, 该跑什么, 是否卡住流程)
     steps = [
-        ("素材", root / DIRS["raw"] / "main.mp4", "把主素材放进来"),
-        ("转写", root / DIRS["transcript"] / "transcript.json", "pipeline.py ingest ."),
-        ("切点", root / DIRS["cut"] / "cutlist.json", "pipeline.py cut ."),
-        ("草稿", root / DIRS["plan"] / "plan.json", "pipeline.py build ."),
-        ("发布稿", root / DIRS["publish"] / "post.json", "pipeline.py pack ."),
+        ("身份", ws / profile_mod.PROFILE_FILE, "pipeline.py profile init", True),
+        ("情报", ws / intel_mod.INTEL_DIR / intel_mod.RAW_FILE, "pipeline.py intel fetch .", True),
+        ("选题", root / DIRS["intel"] / intel_mod.TOPIC_CARD, "pipeline.py topic pick . 1", True),
+        ("脚本", root / DIRS["script"] / "script.md", "写脚本放进来", False),
+        ("素材", root / DIRS["raw"] / "main.mp4", "把主素材放进来", True),
+        ("转写", root / DIRS["transcript"] / "transcript.json", "pipeline.py ingest .", True),
+        ("切点", root / DIRS["cut"] / "cutlist.json", "pipeline.py cut .", True),
+        ("草稿", root / DIRS["plan"] / "plan.json", "pipeline.py build .", True),
+        ("发布稿", root / DIRS["publish"] / "post.json", "pipeline.py pack .", True),
         ("数据", root / DIRS["metrics"] / "metrics.csv",
-         "pipeline.py metrics log . --platform douyin --views ... --completion ..."),
+         "pipeline.py metrics log . --platform douyin --views ... --completion ...", True),
     ]
 
     print(f"项目: {project['name']}")
     print(f"草稿库: {project.get('draft_folder') or '（未设置）'}")
+    topic = project.get("topic")
+    if topic:
+        print(f"选题: {topic.get('title', '')}（{topic.get('source', '')}）")
     print()
     nxt = None
-    for label, path, action in steps:
+    for label, path, action, required in steps:
         ok = path.exists()
-        mark = "✓" if ok else "·"
-        print(f"  {mark} {label:<4} {path.relative_to(root)}")
-        if not ok and nxt is None:
+        mark = "✓" if ok else ("·" if not required else "○")
+        tail = "" if required else "  （可选）"
+        print(f"  {mark} {label:<4} {show(path)}{tail}")
+        if not ok and nxt is None and required:
             nxt = (label, action)
 
     print()
@@ -523,9 +593,22 @@ def cmd_status(args) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        prog="pipeline", description="全链路内容流水线：素材 -> 粗剪 -> 草稿 -> 发布稿"
+        prog="pipeline",
+        description="全链路内容流水线：身份 -> 情报 -> 选题 -> 脚本 -> 素材 -> 粗剪 -> 草稿 -> 发布稿 -> 复盘",
     )
     sub = parser.add_subparsers(dest="cmd", required=True)
+
+    p = sub.add_parser("profile", help="身份卡：我是谁、说给谁听")
+    p.add_argument("rest", nargs=argparse.REMAINDER)
+    p.set_defaults(func=cmd_profile)
+
+    p = sub.add_parser("intel", help="情报采集与选题排序")
+    p.add_argument("rest", nargs=argparse.REMAINDER)
+    p.set_defaults(func=cmd_intel)
+
+    p = sub.add_parser("topic", help="确定选题（= intel pick）")
+    p.add_argument("rest", nargs=argparse.REMAINDER)
+    p.set_defaults(func=cmd_topic)
 
     p = sub.add_parser("init", help="建项目骨架")
     p.add_argument("dir")

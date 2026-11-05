@@ -34,7 +34,7 @@ import metrics as metrics_mod  # noqa: E402
 SKIP_DIRS = {".venv", ".workbuddy", ".backup", ".git", "__pycache__", "node_modules",
              ".idea", ".obsidian"}
 
-STEP_ORDER = ["素材", "转写", "切点", "草稿", "发布稿", "数据"]
+STEP_ORDER = ["选题", "素材", "转写", "切点", "草稿", "发布稿", "数据"]
 
 PLATFORM_FILES = {
     "douyin.md": "抖音",
@@ -96,6 +96,7 @@ def project_summary(project: Path, root: Path) -> dict:
     win = rel.replace("/", "\\")
     cfg = _load_json(project / "project.json")
 
+    topic_card = project / "00-intel" / "选题卡.md"
     raw = project / "02-raw" / "main.mp4"
     transcript = _load_json(project / "03-transcript" / "transcript.json")
     cut = _load_json(project / "04-cut" / "cutlist.json")
@@ -107,6 +108,7 @@ def project_summary(project: Path, root: Path) -> dict:
     rates = [r["completion_rate"] for r in metric_rows if r.get("completion_rate") is not None]
 
     done = {
+        "选题": topic_card.exists(),
         "素材": raw.exists(),
         "转写": bool(transcript.get("segments")),
         "切点": bool(cut.get("units")),
@@ -117,6 +119,7 @@ def project_summary(project: Path, root: Path) -> dict:
     next_step = next((s for s in STEP_ORDER if not done[s]), None)
 
     cmds = {
+        "选题": f".\\run.cmd intel rank {win}  然后 topic pick",
         "素材": f"把主机位放到 {win}\\02-raw\\main.mp4",
         "转写": f".\\run.cmd ingest {win}",
         "切点": f".\\run.cmd cut {win}",

@@ -6,9 +6,44 @@
 把"拍完的素材"推进到**可编辑的剪映草稿 + 四个平台的发布稿**。
 包含一个技能（执行链路）和一个专家（判断与拆工序）。
 
+从**我是谁**开始，到**下一条该拍什么**结束，中间不跳步。
+
+## 完整链路
+
+九段，每段都有固定的输入输出。上游三段的产出决定下游值不值得做，所以它们不是可选项。
+
+| # | 阶段 | 谁做 | 输入 | 输出 | 命令 |
+|---|---|---|---|---|---|
+| 1 | 身份 | 人 | 账号定位、目标观众、变现目标 | `profile.json` + `身份卡.md` | `profile init` / `check` |
+| 2 | 情报 | 脚本抓、人或 agent 喂 | RSS/Atom 源、手工条目 | `intel/raw.jsonl` | `intel fetch` / `intel add` |
+| 3 | 选题 | **脚本排序，人做判断** | 情报库 + 身份卡 | `00-intel/选题候选.md`、`选题卡.md` | `intel rank` / `topic pick` |
+| 4 | 脚本 | 人或专家 | 选题卡 | `01-script/script.md` | — |
+| 5 | 素材 | 人 | 脚本，或已有实拍 | `02-raw/main.mp4`（+ `cut.mp4`） | — |
+| 6 | 转写切点 | 脚本 | 素材 | `transcript.json`、`切点对照表.md` | `ingest` / `cut` |
+| 7 | 草稿 | 脚本 | 切点表 + 画面计划 | 剪映草稿、`plan.json` | `build` |
+| 8 | 分发 | 脚本 | 草稿 + 平台规则 | 四平台发布稿、检查表 | `verify` / `pack` |
+| 9 | 复盘 | 脚本聚合，人决策 | 各平台后台数据 | `metrics.csv`、降权/首发建议 | `metrics` |
+
+三段的分界线要说清，否则容易用错：
+
+- **身份决定情报筛什么。** 赛道关键词是打分里权重最高的一项（35%）。不写身份，抓回来的东西只能按「新」和「热」排，等于没有筛。
+- **脚本排序，人做判断。** `intel rank` 只算五个能算的客观特征：赛道匹配、热度、时效、可验证、可拍。「反常识」「值不值得做」是语义判断，机器算不出来，硬算就是假装有结论。
+- **`topic pick` 不做决定，只做归位。** 它把候选落成一张按模板排好的选题卡，**四栏是空的**。填不填、做不做、要不要换角度，是人写上去的。
+
+同一条情报被多家媒体报道时，`intel rank` 会合并成一条并标出「N 个源在说同一件事」——不合并的话，候选表前三行就是同一条内容，去重的工作又推回给人了。
+
 ## 一条命令一步
 
 ```bash
+# 上游：我是谁 -> 情报 -> 选题
+python scripts/pipeline.py profile init                      # 建身份卡模板（工作区级，一次）
+python scripts/pipeline.py profile check                     # 校验：观众写成「年轻人」会被拦下
+python scripts/pipeline.py intel  fetch .                    # 抓 RSS/Atom 到情报库
+python scripts/pipeline.py intel  add   . --title "..."      # 手工/agent 喂一条
+python scripts/pipeline.py intel  rank  .                    # 五项特征打分排序
+python scripts/pipeline.py topic  pick  . 1                  # 落成选题卡（四栏留空，自己填）
+
+# 下游：脚本 -> 素材 -> 粗剪 -> 草稿 -> 发布 -> 复盘
 python scripts/pipeline.py doctor          # 环境和剪映草稿库自检
 python scripts/pipeline.py init   <目录> --name 第01期
 python scripts/pipeline.py ingest <目录>   # 转写 + 音轨标准化
@@ -41,12 +76,17 @@ python scripts/pipeline.py board                    # 生成工作台 老虎AI�
 ```
 tiger-video-expert/
 ├── SKILL.md                    # 技能主控：三开关 + 形态判断 + 工序 + 精剪 SOP + plan.json 格式
+├── profile.json                # 身份卡（唯一真源，账号级；身份卡.md 由它生成）
+├── intel-sources.json          # 情报源清单（RSS/Atom，自己往里加）
+├── intel/raw.jsonl             # 情报库，跨期累积，第二期不用重抓
 ├── 老虎AI爆款·内容专家.html      # 只读总览，`board` 生成，双击打开
 ├── 知识库/                      # Obsidian vault：选题判断 / 脚本结构 / 切点规则 / 复盘方法
 ├── assets/                     # 品牌资源（logo-128.png / favicon）
 ├── run.cmd                     # 包装器，免激活 venv
 ├── scripts/
 │   ├── pipeline.py             # 单入口 CLI，把下面几步串起来
+│   ├── profile.py              # 身份卡：校验必填项，生成人读版
+│   ├── intel.py                # 情报：抓取、去重合并、五项打分、落选题卡
 │   ├── draft_compat.py         # 剪映草稿库兼容层（布局探测 / 写对文件名 / 修元信息）
 │   ├── audio.py                # 高通 + 降噪 + 两遍 loudnorm 到 -14 LUFS
 │   ├── transcribe.py           # 视频 -> 逐字转写（抽音轨 + faster-whisper + SRT）
@@ -67,6 +107,20 @@ tiger-video-expert/
 └── examples/
     ├── demo/                   # 一条跑通的完整项目（含双机位假素材）
     └── selftest/
+```
+
+`init` 建的每一期项目长这样，编号就是执行顺序：
+
+```
+第01期/
+├── 00-intel/        选题候选.md、topics.json、选题卡.md
+├── 01-script/       script.md
+├── 02-raw/          main.mp4、cut.mp4
+├── 03-transcript/   transcript.json、voice.srt、voice_std.wav
+├── 04-cut/          cutlist.json、切点对照表.md
+├── 05-plan/         plan.json、B-roll待补清单.md
+├── 06-publish/      post.json、四个平台稿、发布前检查.md
+└── 07-metrics/      metrics.csv
 ```
 
 ## 快速开始

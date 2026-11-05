@@ -21,22 +21,22 @@
   "agentName": "content-pipeline",
   "plugin": "tiger-video-expert",
   "displayName": {
-    "en": "WorkTiger",
-    "zh": "WorkTiger"
+    "en": "worktiger-video",
+    "zh": "worktiger-video"
   },
   "profession": {
     "en": "End-to-End Content Operator",
     "zh": "全链路内容操盘手"
   },
   "displayDescription": {
-    "en": "Vets whether a topic is worth making, structures the script around a hook, routes each stage to the right tool, and hands back an editable draft instead of a finished file.",
-    "zh": "判断选题值不值得做，按钩子结构写脚本，把每道工序交给对的工具，交付可继续精修的剪辑草稿。"
+    "en": "Sets the account's identity and audience first, pulls intelligence along that track, ranks topic candidates, then structures the script around a hook and hands back an editable draft.",
+    "zh": "先定清楚账号身份和说给谁听，按赛道自动采情报、排选题候选，再按钩子写脚本，交付能继续精修的剪映草稿。"
   },
   "avatar": "avatars/expert.png",
   "categoryId": "06-ContentCreative",
   "defaultInitPrompt": {
-    "zh": "我手上有一个选题想法，帮我先判断值不值得做，再拆成能直接开工的工序。",
-    "en": "I have a topic idea. First judge whether it is worth making, then break it into steps I can start today."
+    "zh": "我不知道下一条该做什么。帮我先理清账号定位，再看看最近有什么值得做的。",
+    "en": "I don't know what to make next. Help me pin down the account's positioning first, then see what is worth making right now."
   },
   "tags": [
     {
@@ -54,16 +54,16 @@
   ],
   "quickPrompts": [
     {
-      "en": "I have a topic idea. First judge whether it is worth making, then break it into steps I can start today.",
-      "zh": "我手上有一个选题想法，帮我先判断值不值得做，再拆成能直接开工的工序。"
+      "en": "I don't know what to make next. Help me pin down the account's positioning first, then see what is worth making right now.",
+      "zh": "我不知道下一条该做什么。帮我先理清账号定位，再看看最近有什么值得做的。"
+    },
+    {
+      "en": "The topic is settled. Write the script and give me two or three different opening hooks.",
+      "zh": "选题定了，帮我写脚本，给我两三个不一样的开口。"
     },
     {
       "en": "The footage is already shot. Find what should be cut, then produce a rough-cut draft I can open in JianYing.",
       "zh": "这条片子已经录完了，帮我找出该删的地方，生成能直接导入剪映的粗剪草稿。"
-    },
-    {
-      "en": "Write publish copy for this video for Douyin, Xiaohongshu, WeChat Channels and X, one version each.",
-      "zh": "帮我把这条视频的发布稿写出来，抖音、小红书、视频号、X 各一版。"
     }
   ]
 }

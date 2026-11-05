@@ -15,6 +15,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from datetime import date
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -91,21 +92,106 @@ def main() -> int:
             failures.append(label)
 
     try:
-        # --- 造一个"老版本明文布局"的草稿库，模拟真实环境 ---
-        legacy = drafts / "existing-draft"
-        legacy.mkdir(parents=True)
-        (legacy / "draft_content.json").write_text("{}", encoding="utf-8")
-
         print("\n[1] init")
         p = run([PY, str(HERE / "pipeline.py"), "init", str(proj),
                  "--name", "自检-第01期", "--draft-folder", str(drafts)])
         check("init 退出码 0", p.returncode == 0, p.stderr[-400:])
         check("project.json 生成", (proj / "project.json").exists())
-        for d in ("02-raw", "03-transcript", "04-cut", "05-plan", "06-publish"):
+        for d in ("00-intel", "01-script", "02-raw", "03-transcript",
+                  "04-cut", "05-plan", "06-publish"):
             check(f"目录 {d}", (proj / d).is_dir())
 
+        # --- 上游三段：身份 -> 情报 -> 选题 ---
+        print("\n[2] 身份卡与情报")
+        p = run([PY, str(HERE / "pipeline.py"), "profile", "init", "--root", str(work)])
+        check("profile init 退出码 0", p.returncode == 0, p.stderr[-400:])
+        check("profile.json 生成", (work / "profile.json").exists())
+        check("身份卡.md 生成", (work / "身份卡.md").exists())
+
+        p = run([PY, str(HERE / "pipeline.py"), "profile", "check", "--root", str(work)])
+        check("空模板被拦下", p.returncode == 1, "空身份卡竟然通过了")
+
+        prof = json.loads((work / "profile.json").read_text(encoding="utf-8"))
+        prof.update({
+            "account": "自检账号",
+            "track": ["剪映", "短视频", "内容创作"],
+            "audience": {"who": "一个人剪完所有素材的小团队主理人", "pain": "剪不动"},
+            "goal": "涨粉",
+            "platforms": ["douyin"],
+        })
+        (work / "profile.json").write_text(
+            json.dumps(prof, ensure_ascii=False, indent=2), encoding="utf-8")
+        p = run([PY, str(HERE / "pipeline.py"), "profile", "check", "--root", str(work)])
+        check("填完后校验通过", p.returncode == 0, p.stdout[-300:] + p.stderr[-300:])
+
+        # 泛词观众必须被拦：这条不拦，后面的判断全飘
+        prof["audience"] = {"who": "年轻人", "pain": "剪不动"}
+        (work / "profile.json").write_text(
+            json.dumps(prof, ensure_ascii=False, indent=2), encoding="utf-8")
+        p = run([PY, str(HERE / "pipeline.py"), "profile", "check", "--root", str(work)])
+        check("泛词观众被拦下", p.returncode == 1 and "人群标签" in p.stderr, p.stderr[-300:])
+        prof["audience"] = {"who": "一个人剪完所有素材的小团队主理人", "pain": "剪不动"}
+        (work / "profile.json").write_text(
+            json.dumps(prof, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        # 两个源报同一件事，用来验去重和热度
+        def _rss(items: list[tuple[str, str]]) -> str:
+            body = "".join(
+                f"<item><title>{t}</title><link>{u}</link>"
+                f"<description>实测 3 个坑，失败率 30%</description>"
+                f"<pubDate>{date.today().isoformat()}</pubDate></item>"
+                for t, u in items)
+            return f'<?xml version="1.0"?><rss version="2.0"><channel>{body}</channel></rss>'
+
+        f1, f2 = work / "feed1.xml", work / "feed2.xml"
+        f1.write_text(_rss([
+            ("剪映新版把草稿改成加密", "https://a.example/1"),
+            ("没人关心的东西", "https://a.example/2"),
+        ]), encoding="utf-8")
+        f2.write_text(_rss([
+            ("剪映新版草稿加密", "https://b.example/1"),
+            ("短视频选题的四关", "https://b.example/2"),
+        ]), encoding="utf-8")
+        (work / "intel-sources.json").write_text(json.dumps({"sources": [
+            {"name": "源甲", "type": "rss", "url": f1.as_uri()},
+            {"name": "源乙", "type": "rss", "url": f2.as_uri()},
+        ]}, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        p = run([PY, str(HERE / "pipeline.py"), "intel", "fetch", str(proj)])
+        check("intel fetch 退出码 0", p.returncode == 0, p.stderr[-400:])
+        raw = (work / "intel" / "raw.jsonl").read_text(encoding="utf-8").splitlines()
+        check("情报库收到 4 条", len([x for x in raw if x.strip()]) == 4, f"实际 {len(raw)}")
+
+        p = run([PY, str(HERE / "pipeline.py"), "intel", "rank", str(proj)])
+        check("intel rank 退出码 0", p.returncode == 0, p.stderr[-400:])
+        check("选题候选.md 生成", (proj / "00-intel" / "选题候选.md").exists())
+        topics = json.loads((proj / "00-intel" / "topics.json").read_text(encoding="utf-8"))
+        check("同一件事被合并成 1 条", len(topics) == 3, f"实际 {len(topics)} 条")
+        top = topics[0] if topics else {}
+        check("合并后记录了 2 个源", top.get("cluster") == 2, f"实际 {top.get('cluster')}")
+        check("多源被合并而不是丢源", len(top.get("sources") or []) == 2,
+              f"实际 {top.get('sources')}")
+
+        p = run([PY, str(HERE / "pipeline.py"), "topic", "pick", str(proj), "1"])
+        check("topic pick 退出码 0", p.returncode == 0, p.stderr[-400:])
+        card = proj / "00-intel" / "选题卡.md"
+        check("选题卡生成", card.exists())
+        if card.exists():
+            text = card.read_text(encoding="utf-8")
+            check("选题卡带了情报依据", "## 情报依据" in text)
+            # 四栏必须留空：脚本不替人下结论
+            about = text.split("## 一句话选题")[1].split("## 目")[0].strip()
+            check("四栏留空不代填", about == "", f"竟然填了内容：{about[:40]}")
+        saved = json.loads((proj / "project.json").read_text(encoding="utf-8"))
+        check("选题写进了 project.json", bool(saved.get("topic", {}).get("title")))
+
+        # --- 造一个"老版本明文布局"的草稿库，模拟真实环境 ---
+        legacy = drafts / "existing-draft"
+        legacy.mkdir(parents=True)
+        (legacy / "draft_content.json").write_text("{}", encoding="utf-8")
+
         # --- 造双机位素材 ---
-        print("\n[2] 造素材")
+        print("\n[3] 造素材")
         make_video(ffmpeg, proj / "02-raw" / "main.mp4", "0x204060")
         make_video(ffmpeg, proj / "02-raw" / "cut.mp4", "0x602040")
         check("main.mp4", (proj / "02-raw" / "main.mp4").stat().st_size > 10000)
@@ -119,7 +205,7 @@ def main() -> int:
             json.dumps(project, ensure_ascii=False, indent=2), encoding="utf-8")
 
         # --- 跳过 ASR：直接塞假 transcript ---
-        print("\n[3] 音轨标准化（真跑 ffmpeg）")
+        print("\n[4] 音轨标准化（真跑 ffmpeg）")
         src_wav = proj / "03-transcript" / "voice_raw.wav"
         p = run([PY, str(HERE / "audio.py"), "standardize",
                  str(proj / "02-raw" / "main.mp4"), str(src_wav)])
@@ -146,7 +232,7 @@ def main() -> int:
         (proj / "project.json").write_text(
             json.dumps(project, ensure_ascii=False, indent=2), encoding="utf-8")
 
-        print("\n[4] cut")
+        print("\n[5] cut")
         p = run([PY, str(HERE / "pipeline.py"), "cut", str(proj)])
         check("cut 退出码 0", p.returncode == 0, p.stderr[-500:])
         cut_path = proj / "04-cut" / "cutlist.json"
@@ -163,7 +249,7 @@ def main() -> int:
             check("总时长缩短", cut["total_out"] < cut["total_in"],
                   f"{cut['total_out']} vs {cut['total_in']}")
 
-        print("\n[5] build（生成剪映草稿）")
+        print("\n[6] build（生成剪映草稿）")
         # 布局由剪映版本决定，先问 doctor 该写哪些文件，再验 build 有没有照着做
         dp = run([PY, str(HERE / "pipeline.py"), "doctor", "--draft-root", str(drafts)])
         layout = ""
@@ -216,11 +302,11 @@ def main() -> int:
             angles = {s["video"] for s in plan["shots"]}
             check("跳点处切了机位（用上两个角度）", len(angles) >= 2, f"实际 {angles}")
 
-        print("\n[6] verify")
+        print("\n[7] verify")
         p = run([PY, str(HERE / "pipeline.py"), "verify", str(proj)])
         check("verify 通过", p.returncode == 0, p.stdout[-600:] + p.stderr[-300:])
 
-        print("\n[7] pack")
+        print("\n[8] pack")
         (proj / "06-publish").mkdir(exist_ok=True)
         (proj / "06-publish" / "post.json").write_text(
             json.dumps(POST, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -230,11 +316,11 @@ def main() -> int:
             check(f"{plat}.md", (proj / "06-publish" / f"{plat}.md").exists())
         check("发布前检查.md", (proj / "06-publish" / "发布前检查.md").exists())
 
-        print("\n[8] status")
+        print("\n[9] status")
         p = run([PY, str(HERE / "pipeline.py"), "status", str(proj)])
         check("status 退出码 0", p.returncode == 0)
 
-        print("\n[9] doctor")
+        print("\n[10] doctor")
         p = run([PY, str(HERE / "pipeline.py"), "doctor", "--draft-root", str(drafts)])
         check("doctor 退出码 0", p.returncode == 0, p.stderr[-400:])
         if p.returncode == 0:
