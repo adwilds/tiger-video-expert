@@ -1,0 +1,43 @@
+{
+  "name": "演示-粗剪",
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30
+  },
+  "draft_folder": "%LOCALAPPDATA%\\JianyingPro\\User Data\\Projects\\com.lveditor.draft",
+  "angles": {
+    "main": "02-raw/main.mp4",
+    "cut": "02-raw/cut.mp4"
+  },
+  "audio": "03-transcript/voice_std.wav",
+  "srt": "03-transcript/voice.srt",
+  "look": {
+    "filter": "INS暗",
+    "intensity": 30
+  },
+  "title_style": {
+    "size": 9.0,
+    "bold": true,
+    "vertical": -0.74
+  },
+  "cut": {
+    "min_keep_gap": 1.0,
+    "padding": 0.15,
+    "silence_target": 0.35,
+    "breath_pause": 0.8,
+    "think_pause": 2.5,
+    "similar": 0.92,
+    "max_shrink": 0.35
+  },
+  "asr": {
+    "model": "tiny",
+    "language": "zh"
+  },
+  "platforms": [
+    "douyin",
+    "xhs",
+    "shipinhao",
+    "x"
+  ]
+}

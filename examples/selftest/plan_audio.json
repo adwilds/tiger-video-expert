@@ -1,0 +1,31 @@
+{
+  "name": "selftest-含音频",
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30
+  },
+  "draft_folder": "%LOCALAPPDATA%\\JianyingPro\\User Data\\Projects\\com.lveditor.draft",
+  "srt": "captions.srt",
+  "shots": [
+    {
+      "image": "frame_01.png",
+      "start": 0.0,
+      "end": 2.5,
+      "motion": "push_in"
+    },
+    {
+      "image": "frame_02.png",
+      "start": 2.5,
+      "end": 5.2,
+      "motion": "push_in"
+    },
+    {
+      "image": "frame_03.png",
+      "start": 5.2,
+      "end": 8.0,
+      "motion": "push_in"
+    }
+  ],
+  "audio": "voice.wav"
+}

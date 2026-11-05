@@ -1,0 +1,66 @@
+{
+  "total_in": 60.0,
+  "total_out": 55.5,
+  "shrink": 0.075,
+  "keep_ranges": [
+    {
+      "start": 0.0,
+      "end": 8.0
+    },
+    {
+      "start": 9.0,
+      "end": 25.0
+    },
+    {
+      "start": 28.0,
+      "end": 44.0
+    },
+    {
+      "start": 46.0,
+      "end": 60.0
+    }
+  ],
+  "timeline": [
+    {
+      "src_start": 0.0,
+      "src_end": 8.0,
+      "dst_start": 0.0,
+      "dst_end": 8.0
+    },
+    {
+      "src_start": 9.0,
+      "src_end": 25.0,
+      "dst_start": 8.35,
+      "dst_end": 24.35
+    },
+    {
+      "src_start": 28.0,
+      "src_end": 44.0,
+      "dst_start": 25.15,
+      "dst_end": 41.15
+    },
+    {
+      "src_start": 46.0,
+      "src_end": 60.0,
+      "dst_start": 41.5,
+      "dst_end": 55.5
+    }
+  ],
+  "cuts": [
+    {
+      "start": 8.0,
+      "end": 9.0,
+      "text": "嗯…",
+      "reason": "独立语气词"
+    }
+  ],
+  "protected": [
+    {
+      "text": "但是真正的问题不是这个，",
+      "reason": "保护词「但是」"
+    }
+  ],
+  "warnings": [
+    "25.00s–28.00s 有 3.00s 长停顿，压到 0.80s"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "title": "AI 剪辑的门槛根本不是工具",
+  "topic": "AI 剪辑",
+  "hook": "AI 剪辑最难的地方，根本不是工具。",
+  "key_points": [
+    "工具决定你多快做完，切点决定观众看不看得下去",
+    "每剪掉一段就是一个跳点，必须用换机位或空镜盖住",
+    "先把停顿压缩、再把音画对齐，顺序反了必返工"
+  ],
+  "proof": "这条 58 秒素材剪到 51 秒，3 处跳点用第二机位盖住 2 处，剩 1 处补空镜。",
+  "cta": "你剪片子是先配音还是先配画面？说一句。",
+  "cover_text": "门槛不在工具",
+  "hashtags_common": [
+    "AI剪辑",
+    "短视频"
+  ],
+  "hashtags": {
+    "x": [
+      "AIvideo",
+      "contentcreation"
+    ]
+  },
+  "titles": {
+    "douyin": "AI 剪辑的门槛根本不是工具",
+    "xhs": "AI剪辑真正的门槛",
+    "shipinhao": "剪辑门槛在切点",
+    "x": "The real bottleneck in AI video editing is not the tool"
+  },
+  "platforms": [
+    "douyin",
+    "xhs",
+    "shipinhao",
+    "x"
+  ]
+}

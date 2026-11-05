@@ -1,0 +1,52 @@
+{
+  "title": "AI 没崩，是估值锚换了",
+  "topic": "AI 融资",
+  "hook": "十月美股 AI 股跌成一片，但同一周有人拿到 198 亿。这不叫泡沫破裂。",
+  "key_points": [
+    "跌的是估值倍数不是收入：标普 500 预期市盈率回落两成，英特尔单日跌 28.6%",
+    "钱去了有收入的公司：Anthropic 上半年营收 162.86 亿美元，七成来自年付 10 万美元以上的企业客户",
+    "一级市场还在给钱：可灵到账 198 亿，Fal 估值从 80 亿翻到 160 亿美元"
+  ],
+  "proof": "五个数字全部来自公开报道和港交所公告，出处写在第 01 期脚本里。",
+  "cta": "你的融资故事里，收入写在第几页？评论区说说。",
+  "cover_text": "AI 没崩，是锚换了",
+  "hashtags_common": [
+    "AI融资",
+    "AI创业"
+  ],
+  "hashtags": {
+    "douyin": [
+      "AI"
+    ],
+    "xhs": [
+      "商业思维",
+      "搞钱",
+      "AI"
+    ],
+    "x": [
+      "AI",
+      "VC"
+    ]
+  },
+  "titles": {
+    "douyin": "AI 没崩，是估值锚换了",
+    "xhs": "AI 融资的门槛，换了一条",
+    "shipinhao": "钱没走，换了地方",
+    "x": "AI didn't crash. The valuation anchor moved."
+  },
+  "platforms": [
+    "douyin",
+    "xhs",
+    "shipinhao",
+    "x"
+  ],
+  "bodies": {
+    "x": "AI stocks sank all October. Same week, Kling raised 19.8B RMB.\n\nNot a bubble. Three numbers:\n\n- S&P 500 fwd P/E -20%, Intel -28.6% in a day\n- Anthropic $16.3B H1, 70% from 100k+ deals\n- Fal valuation 8B to 16B\n\nWhere is revenue in your deck?\n\n#AI #VC"
+  },
+  "hashtags_override": {
+    "x": [
+      "AI",
+      "VC"
+    ]
+  }
+}

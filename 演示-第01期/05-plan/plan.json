@@ -1,0 +1,204 @@
+{
+  "name": "演示-第01期",
+  "draft_folder": "%LOCALAPPDATA%\\JianyingPro\\User Data\\Projects\\com.lveditor.draft",
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30
+  },
+  "look": {
+    "filter": "INS暗",
+    "intensity": 30
+  },
+  "title_style": {
+    "size": 8.0,
+    "bold": true,
+    "vertical": -0.72
+  },
+  "shots": [
+    {
+      "start": 0.0,
+      "end": 4.1,
+      "video": "02-raw/main.mp4",
+      "src_start": 0.0,
+      "motion": "none"
+    },
+    {
+      "start": 4.1,
+      "end": 11.24,
+      "video": "02-raw/cut.mp4",
+      "src_start": 21.45,
+      "motion": "none"
+    },
+    {
+      "start": 11.24,
+      "end": 13.33,
+      "video": "02-raw/main.mp4",
+      "src_start": 30.06,
+      "motion": "none"
+    },
+    {
+      "start": 13.33,
+      "end": 14.64,
+      "video": "02-raw/cut.mp4",
+      "src_start": 34.06,
+      "motion": "none"
+    },
+    {
+      "start": 14.64,
+      "end": 19.71,
+      "video": "02-raw/main.mp4",
+      "src_start": 36.41,
+      "motion": "none"
+    },
+    {
+      "start": 19.71,
+      "end": 25.05,
+      "video": "02-raw/cut.mp4",
+      "src_start": 42.07,
+      "motion": "none"
+    },
+    {
+      "start": 25.05,
+      "end": 27.56,
+      "video": "02-raw/main.mp4",
+      "src_start": 48.61,
+      "motion": "none"
+    },
+    {
+      "start": 27.56,
+      "end": 28.77,
+      "video": "02-raw/cut.mp4",
+      "src_start": 52.75,
+      "motion": "none"
+    },
+    {
+      "start": 28.77,
+      "end": 34.1,
+      "video": "02-raw/main.mp4",
+      "src_start": 55.2,
+      "motion": "none"
+    },
+    {
+      "start": 34.1,
+      "end": 37.35,
+      "video": "02-raw/cut.mp4",
+      "src_start": 61.65,
+      "motion": "none"
+    },
+    {
+      "start": 37.35,
+      "end": 41.83,
+      "video": "02-raw/main.mp4",
+      "src_start": 65.63,
+      "motion": "none"
+    },
+    {
+      "start": 41.83,
+      "end": 45.68,
+      "video": "02-raw/cut.mp4",
+      "src_start": 71.69,
+      "motion": "none"
+    },
+    {
+      "start": 45.68,
+      "end": 48.67,
+      "video": "02-raw/main.mp4",
+      "src_start": 76.77,
+      "motion": "none"
+    },
+    {
+      "start": 48.67,
+      "end": 51.97,
+      "video": "02-raw/cut.mp4",
+      "src_start": 80.48,
+      "motion": "none"
+    },
+    {
+      "start": 51.97,
+      "end": 56.5,
+      "video": "02-raw/main.mp4",
+      "src_start": 85.31,
+      "motion": "none"
+    }
+  ],
+  "audio": "03-transcript/voice_std.wav",
+  "audio_segments": [
+    {
+      "start": 0.0,
+      "end": 4.1,
+      "src_start": 0.0
+    },
+    {
+      "start": 4.1,
+      "end": 11.24,
+      "src_start": 21.45
+    },
+    {
+      "start": 11.24,
+      "end": 13.33,
+      "src_start": 30.06
+    },
+    {
+      "start": 13.33,
+      "end": 14.64,
+      "src_start": 34.06
+    },
+    {
+      "start": 14.64,
+      "end": 19.71,
+      "src_start": 36.41
+    },
+    {
+      "start": 19.71,
+      "end": 25.05,
+      "src_start": 42.07
+    },
+    {
+      "start": 25.05,
+      "end": 27.56,
+      "src_start": 48.61
+    },
+    {
+      "start": 27.56,
+      "end": 28.77,
+      "src_start": 52.75
+    },
+    {
+      "start": 28.77,
+      "end": 34.1,
+      "src_start": 55.2
+    },
+    {
+      "start": 34.1,
+      "end": 37.35,
+      "src_start": 61.65
+    },
+    {
+      "start": 37.35,
+      "end": 41.83,
+      "src_start": 65.63
+    },
+    {
+      "start": 41.83,
+      "end": 45.68,
+      "src_start": 71.69
+    },
+    {
+      "start": 45.68,
+      "end": 48.67,
+      "src_start": 76.77
+    },
+    {
+      "start": 48.67,
+      "end": 51.97,
+      "src_start": 80.48
+    },
+    {
+      "start": 51.97,
+      "end": 56.5,
+      "src_start": 85.31
+    }
+  ],
+  "srt": "04-cut/voice_cut.srt"
+}

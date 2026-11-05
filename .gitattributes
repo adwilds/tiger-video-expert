@@ -1,0 +1,20 @@
+# 默认按文本处理，仓库内存 LF
+* text=auto
+
+# run.cmd 必须是 CRLF：LF 换行会让 cmd.exe 把 rem 注释当命令执行
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# 源码和内容统一 LF，避免跨平台 diff 噪音
+*.py  text eol=lf
+*.md  text eol=lf
+*.json text eol=lf
+*.srt text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+
+# 二进制，别做行尾转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary

@@ -1,0 +1,72 @@
+{
+  "name": "演示-粗剪",
+  "draft_folder": "%LOCALAPPDATA%\\JianyingPro\\User Data\\Projects\\com.lveditor.draft",
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30
+  },
+  "look": {
+    "filter": "INS暗",
+    "intensity": 30
+  },
+  "title_style": {
+    "size": 9.0,
+    "bold": true,
+    "vertical": -0.74
+  },
+  "shots": [
+    {
+      "start": 0.0,
+      "end": 7.6,
+      "video": "02-raw/main.mp4",
+      "src_start": 0.0,
+      "motion": "none"
+    },
+    {
+      "start": 7.6,
+      "end": 17.2,
+      "video": "02-raw/cut.mp4",
+      "src_start": 10.8,
+      "motion": "none"
+    },
+    {
+      "start": 17.2,
+      "end": 29.6,
+      "video": "02-raw/main.mp4",
+      "src_start": 22.4,
+      "motion": "none"
+    },
+    {
+      "start": 29.6,
+      "end": 51.35,
+      "video": "02-raw/cut.mp4",
+      "src_start": 36.25,
+      "motion": "none"
+    }
+  ],
+  "audio": "03-transcript/voice_std.wav",
+  "audio_segments": [
+    {
+      "start": 0.0,
+      "end": 7.6,
+      "src_start": 0.0
+    },
+    {
+      "start": 7.6,
+      "end": 17.2,
+      "src_start": 10.8
+    },
+    {
+      "start": 17.2,
+      "end": 29.6,
+      "src_start": 22.4
+    },
+    {
+      "start": 29.6,
+      "end": 51.35,
+      "src_start": 36.25
+    }
+  ],
+  "srt": "04-cut/voice_cut.srt"
+}

@@ -1,0 +1,32 @@
+{
+  "name": "tiger-video-expert",
+  "version": "0.3.0",
+  "description": "Tiger video expert: short-video full-pipeline content operator. Topic selection, script structure, production routing, editing-draft handoff.",
+  "license": "CC-BY-NC-SA-4.0",
+  "author": {
+    "name": "tiger-fde-os",
+    "email": "local@localhost"
+  },
+  "agents": [
+    "./agents/content-pipeline.md"
+  ],
+  "expertType": "agent",
+  "agentName": "content-pipeline",
+  "displayName": {
+    "en": "Full-Pipeline Content Operator",
+    "zh": "全链路内容专家"
+  },
+  "profession": {
+    "en": "Short-Video Full-Pipeline Content Operator",
+    "zh": "短视频全链路内容操盘手"
+  },
+  "displayDescription": {
+    "en": "Runs short-video production end to end: decides whether a topic is worth making, structures the script around a hook, routes each stage to the right tool, and hands back an editable editing draft instead of a finished file.",
+    "zh": "判断选题值不值得做，按钩子结构写脚本，把每道工序交给对的工具，交付可继续精修的剪辑草稿。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "05-Marketing",
+  "defaultInitPrompt": {
+    "zh": "我手上有一个选题想法，帮我先判断值不值得做，再拆成能直接开工的工序。"
+  }
+}
