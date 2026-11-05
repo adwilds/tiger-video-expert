@@ -5,7 +5,7 @@
     "height": 1920,
     "fps": 30
   },
-  "draft_folder": "%LOCALAPPDATA%\\JianyingPro\\User Data\\Projects\\com.lveditor.draft",
+  "draft_folder": "%JIANYING_DRAFTS%",
   "angles": {
     "main": "02-raw/main.mp4",
     "cut": "02-raw/cut.mp4"

@@ -98,6 +98,10 @@ def cmd_init(args) -> int:
 
     print(f"项目已建好: {root}")
     print(f"  草稿库: {project['draft_folder'] or '（没自动找到，填 project.json 的 draft_folder）'}")
+    if not args.draft_folder and project["draft_folder"]:
+        homes = draft_compat.draft_homes()
+        if homes:
+            print(f"  选它的原因: 这台机器上它装着 {homes[0]['drafts']} 个草稿，是剪映真正在读的库")
     print()
     print("下一步：把主素材放到 02-raw/main.mp4，然后跑 pipeline.py ingest")
     return 0
@@ -162,8 +166,17 @@ def cmd_doctor(args) -> int:
 
     root = Path(args.draft_root) if args.draft_root else draft_compat.guess_draft_root()
     d = draft_compat.doctor(root)
+    app = d.get("app") or {}
+    report["剪映版本"] = f"{app.get('version') or '未识别'}（{app.get('era')}）"
+    report["剪映代际"] = app.get("era")
     report["草稿库"] = d.get("draft_root")
+    report["草稿库来源"] = d.get("draft_root_source")
+    report["草稿库候选"] = [
+        f"{h['drafts']} 个草稿{'（剪映配置指向）' if h.get('configured') else ''} · {h['root']}"
+        for h in (d.get("homes") or [])[:3]
+    ]
     report["草稿库布局"] = d.get("layout")
+    report["布局依据"] = d.get("layout_reason")
     report["草稿库可写"] = d.get("writable")
     report["布局说明"] = d.get("advice")
 
@@ -338,8 +351,13 @@ def cmd_build(args) -> int:
     )
     db.write_broll_todo(report, pdir / "B-roll待补清单.md", len(plan["shots"]))
 
-    layout = draft_compat.inspect(draft_compat.expand_path(project["draft_folder"])).get("layout", "plaintext")
-    print(f"草稿库布局: {layout}")
+    folder = draft_compat.expand_path(project["draft_folder"])
+    layout, reason = draft_compat.resolve_layout(getattr(args, "layout", None), folder)
+    app = draft_compat.detect_app()
+    files = " + ".join(draft_compat.target_filenames(layout))
+    print(f"剪映: {app['version'] or '未识别'}（{app['era']}）｜布局: {layout}")
+    print(f"  依据: {reason}")
+    print(f"  落盘: {files}")
     out = db.build(plan, root, layout=layout)
 
     print(f"跳点 {report['seams']} 处，换机位盖住 {report['angle_switches']} 处，"
@@ -515,6 +533,9 @@ def main(argv: list[str] | None = None) -> int:
 
     p = sub.add_parser("build", help="生成剪映草稿")
     p.add_argument("dir")
+    p.add_argument("--layout", default="auto",
+                   choices=["auto", "plaintext", "content", "info", "both"],
+                   help="时间轴文件写哪个；auto 按剪映版本判，升级后判错就手动指定")
     p.set_defaults(func=cmd_build)
 
     p = sub.add_parser("verify", help="交付前校验")

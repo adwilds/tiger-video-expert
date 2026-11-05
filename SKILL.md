@@ -149,7 +149,10 @@ python scripts/pipeline.py status <项目目录>                 # 随时看走�
 1. **画面不留空隙**：切点表里的呼吸停顿折算回源素材，画面首尾相接，不出黑帧
 2. **配音跟着切**：音频按同一套保留区间切段，不是挂整条原音轨（否则累计漂移）
 3. **跳点换机位**：每个断开处自动切辅机位，盖住跳切；没机位就写进待补清单
-4. **兼容层对齐**：按草稿库实际布局写 `draft_content.json` / `draft_info.json`，并修正 `draft_meta_info.json` 里的路径（不改的话剪映列表里能看到但打不开）
+4. **兼容层对齐**：读注册表拿到剪映版本，`≥ 6.0` 双写 `draft_content.json` + `draft_info.json`
+   （都是明文），`< 6.0` 只写 `draft_content.json`；再修正 `draft_meta_info.json` 里的路径，
+   并写入 `draft_tool` 标记（下次探测时能认出这是本工具生成的明文草稿，不拿它当剪映读明文的证据）。
+   草稿库位置读剪映 `Config/globalSetting` 的 `currentCustomDraftPath`，配置里可写 `%JIANYING_DRAFTS%`。
 
 ## 精剪 SOP（交给用户的七步）
 
@@ -193,7 +196,7 @@ python scripts/pipeline.py metrics report --all .
 {
   "name": "草稿名（剪映里显示的名字）",
   "canvas": { "width": 1080, "height": 1920, "fps": 30 },
-  "draft_folder": "C:\\Users\\<用户名>\\AppData\\Local\\JianyingPro\\User Data\\Projects\\com.lveditor.draft",
+  "draft_folder": "%JIANYING_DRAFTS%",
   "audio": "03-transcript/voice_std.wav",
   "audio_segments": [
     { "start": 0.0, "end": 7.4, "src_start": 0.0 }

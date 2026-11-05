@@ -164,11 +164,27 @@ def main() -> int:
                   f"{cut['total_out']} vs {cut['total_in']}")
 
         print("\n[5] build（生成剪映草稿）")
+        # 布局由剪映版本决定，先问 doctor 该写哪些文件，再验 build 有没有照着做
+        dp = run([PY, str(HERE / "pipeline.py"), "doctor", "--draft-root", str(drafts)])
+        layout = ""
+        era = ""
+        if dp.returncode == 0:
+            drep = json.loads(dp.stdout)
+            layout = drep.get("草稿库布局") or ""
+            era = drep.get("剪映代际") or ""
+        check("doctor 给出布局", layout in ("plaintext", "info"), f"实际 {layout}")
+
         p = run([PY, str(HERE / "pipeline.py"), "build", str(proj)])
         check("build 退出码 0", p.returncode == 0, p.stderr[-800:])
         draft_path = drafts / project["name"]
         check("草稿目录生成", draft_path.exists())
         content_file = draft_path / "draft_content.json"
+        if layout == "info":
+            info_file = draft_path / "draft_info.json"
+            check("新版双写 draft_info.json", info_file.exists())
+            if info_file.exists() and content_file.exists():
+                check("两个时间轴文件内容一致",
+                      info_file.read_bytes() == content_file.read_bytes())
         if content_file.exists():
             check("draft_content.json", True)
             content = json.loads(content_file.read_text(encoding="utf-8"))
@@ -183,6 +199,9 @@ def main() -> int:
                   str(draft_path.resolve()) in json.dumps(meta.get("draft_fold_path", "")).replace("\\\\", "\\")
                   or meta.get("draft_fold_path", "").startswith(str(draft_path.resolve())[:8]),
                   str(meta.get("draft_fold_path"))[:80])
+            check("draft_meta 打上本工具标记（探测时能认出是自己写的）",
+                  meta.get("draft_tool") == "tiger-video-expert",
+                  str(meta.get("draft_tool")))
         check("plan.json", (proj / "05-plan" / "plan.json").exists())
         check("B-roll待补清单.md", (proj / "05-plan" / "B-roll待补清单.md").exists())
 
@@ -214,8 +233,12 @@ def main() -> int:
         check("doctor 退出码 0", p.returncode == 0, p.stderr[-400:])
         if p.returncode == 0:
             rep = json.loads(p.stdout)
-            check("识别出明文布局", rep.get("草稿库布局") == "plaintext",
-                  f"实际 {rep.get('草稿库布局')}")
+            expected = "info" if era == "modern" else "plaintext"
+            check("布局按剪映版本判定（不靠存量草稿自证）",
+                  rep.get("草稿库布局") == expected,
+                  f"期望 {expected}，实际 {rep.get('草稿库布局')}")
+            check("给出判定依据", bool(rep.get("布局依据")), str(rep.get("布局依据")))
+            check("报告剪映版本字段", "剪映版本" in rep, str(list(rep.keys()))[:120])
 
     finally:
         if failures:

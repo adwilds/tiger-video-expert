@@ -1,6 +1,6 @@
 {
   "name": "演示-第01期",
-  "draft_folder": "%LOCALAPPDATA%\\JianyingPro\\User Data\\Projects\\com.lveditor.draft",
+  "draft_folder": "%JIANYING_DRAFTS%",
   "canvas": {
     "width": 1080,
     "height": 1920,
