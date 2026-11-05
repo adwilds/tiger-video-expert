@@ -370,6 +370,10 @@ def build(plan: dict, plan_dir: Path, *, layout: str = "plaintext") -> Path:
     script.save()
 
     draft_path = Path(folder_path) / plan["name"]
+    # 先修时间轴自身的 id 和时长，再复制成 draft_info.json，否则 info 里是旧值
+    content_fix = draft_compat.fix_draft_content(draft_path)
+    if not content_fix.get("ok"):
+        print(f"[警告] 时间轴 id/时长没对齐: {content_fix.get('reason')}", file=sys.stderr)
     draft_compat.apply_layout(draft_path, layout)
     meta = draft_compat.fix_draft_meta(draft_path)
     if not meta.get("ok"):

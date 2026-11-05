@@ -501,6 +501,43 @@ def apply_layout(draft_path: Path, layout: str) -> Path:
     return content
 
 
+def fix_draft_content(draft_path: Path) -> dict:
+    """把时间轴里的 id 和时长对齐到草稿本身。
+
+    两个都是 pyJianYingDraft 模板带出来的毛病：
+    - `content["id"]` 是模板里的固定值，所有草稿共用同一个 id。
+      剪映按 id 做缓存/去重，多个草稿同 id 会互相串。
+    - `draft_meta_info.json` 的 `tm_duration` 是 0，草稿列表里显示 0:00。
+
+    返回 {"ok","id_fixed","duration"}。
+    """
+    draft_path = Path(draft_path)
+    content_file = draft_path / CONTENT
+    meta_file = draft_path / "draft_meta_info.json"
+    if not content_file.exists() or not meta_file.exists():
+        return {"ok": False, "reason": "缺 draft_content.json 或 draft_meta_info.json"}
+
+    try:
+        content = json.loads(content_file.read_text(encoding="utf-8"))
+        meta = json.loads(meta_file.read_text(encoding="utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        return {"ok": False, "reason": f"解析失败: {exc}"}
+
+    draft_id = str(meta.get("draft_id") or "").strip()
+    id_fixed = False
+    if draft_id and str(content.get("id") or "") != draft_id:
+        content["id"] = draft_id
+        id_fixed = True
+        content_file.write_text(json.dumps(content, ensure_ascii=False), encoding="utf-8")
+
+    duration = content.get("duration") or 0
+    if meta.get("tm_duration") != duration:
+        meta["tm_duration"] = duration
+        meta_file.write_text(json.dumps(meta, ensure_ascii=False), encoding="utf-8")
+
+    return {"ok": True, "id_fixed": id_fixed, "duration": duration}
+
+
 def fix_draft_meta(draft_path: Path) -> dict:
     """把 draft_meta_info.json 里的路径字段改成实际路径。
 

@@ -202,6 +202,12 @@ def main() -> int:
             check("draft_meta 打上本工具标记（探测时能认出是自己写的）",
                   meta.get("draft_tool") == "tiger-video-expert",
                   str(meta.get("draft_tool")))
+            check("时间轴 id 与 meta draft_id 一致（模板自带固定 id 会让草稿互相串）",
+                  str(content.get("id")).lower() == str(meta.get("draft_id")).lower(),
+                  f"content={content.get('id')} meta={meta.get('draft_id')}")
+            check("tm_duration 已回填（否则草稿列表显示 0:00）",
+                  meta.get("tm_duration") == content.get("duration"),
+                  f"meta={meta.get('tm_duration')} content={content.get('duration')}")
         check("plan.json", (proj / "05-plan" / "plan.json").exists())
         check("B-roll待补清单.md", (proj / "05-plan" / "B-roll待补清单.md").exists())
 

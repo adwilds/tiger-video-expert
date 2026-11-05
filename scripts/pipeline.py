@@ -358,6 +358,21 @@ def cmd_build(args) -> int:
     print(f"剪映: {app['version'] or '未识别'}（{app['era']}）｜布局: {layout}")
     print(f"  依据: {reason}")
     print(f"  落盘: {files}")
+
+    # 剪映打开并保存过的草稿，时间轴会被改写成加密载荷。这时再生成会整目录重建，
+    # 把精剪改动抹掉——除非明确 --force。
+    target = folder / plan["name"]
+    existing = draft_compat.classify_file(target / draft_compat.CONTENT)
+    if existing in ("encrypted", "corrupt") and not getattr(args, "force", False):
+        print(
+            f"\n拒绝覆盖: {target} 的时间轴已不是明文（{existing}），"
+            "说明这个草稿被剪映打开并保存过，里面有你的精剪改动。\n"
+            "  要保留：在剪映里「另存为」一份，再改 project.json 的 name\n"
+            "  确实要覆盖：加 --force\n",
+            file=sys.stderr,
+        )
+        return 2
+
     out = db.build(plan, root, layout=layout)
 
     print(f"跳点 {report['seams']} 处，换机位盖住 {report['angle_switches']} 处，"
@@ -536,6 +551,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--layout", default="auto",
                    choices=["auto", "plaintext", "content", "info", "both"],
                    help="时间轴文件写哪个；auto 按剪映版本判，升级后判错就手动指定")
+    p.add_argument("--force", action="store_true",
+                   help="草稿已被剪映保存过（时间轴变加密）时仍然覆盖，会丢掉精剪改动")
     p.set_defaults(func=cmd_build)
 
     p = sub.add_parser("verify", help="交付前校验")
