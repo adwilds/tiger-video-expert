@@ -1,0 +1,30 @@
+{
+  "_说明": "往里加 RSS/Atom 源。type 只支持 rss（Atom 也算）。抓不到会逐条报错，不影响其他源。enabled 设为 false 可临时停用。",
+  "sources": [
+    {
+      "name": "量子位",
+      "type": "rss",
+      "url": "https://www.qbitai.com/feed"
+    },
+    {
+      "name": "少数派",
+      "type": "rss",
+      "url": "https://sspai.com/feed"
+    },
+    {
+      "name": "爱范儿",
+      "type": "rss",
+      "url": "https://www.ifanr.com/feed"
+    },
+    {
+      "name": "阮一峰周刊",
+      "type": "rss",
+      "url": "https://www.ruanyifeng.com/blog/atom.xml"
+    },
+    {
+      "name": "Hacker News",
+      "type": "rss",
+      "url": "https://hnrss.org/frontpage"
+    }
+  ]
+}

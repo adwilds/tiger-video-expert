@@ -1,0 +1,313 @@
+[
+  {
+    "title": "Images 2.6",
+    "url": "https://openai.com/index/introducing-images-2-6/",
+    "summary": "Article URL: https://openai.com/index/introducing-images-2-6/ Comments URL: https://news.ycombinator.com/item?id=50372945 Points: 296 # Comments: 174",
+    "published": "2026-11-04",
+    "source": "Hacker News",
+    "id": "9320bcda5f3a",
+    "fetched": "2026-11-05T18:18:04",
+    "sources": [
+      "Hacker News",
+      "爱范儿",
+      "量子位"
+    ],
+    "cluster": 3,
+    "also": [
+      {
+        "source": "量子位",
+        "url": "https://www.qbitai.com/2026/11/507707.html"
+      },
+      {
+        "source": "爱范儿",
+        "url": "https://www.ifanr.com/1687778?utm_source=rss&utm_medium=rss&utm_campaign="
+      }
+    ],
+    "score": 0.725,
+    "parts": {
+      "track": 0.5,
+      "heat": 1.0,
+      "fresh": 1.0,
+      "verify": 1.0,
+      "shoot": 0.0
+    },
+    "matched": [
+      "AI 工具"
+    ]
+  },
+  {
+    "title": "实测 iPhone 国行 AI：有亮点有槽点，还有一个惊喜点",
+    "url": "https://www.ifanr.com/1687733?utm_source=rss&utm_medium=rss&utm_campaign=",
+    "summary": "这次你一定要用上 Apple 智能！ #欢迎关注爱范儿官方微信公众号：爱范儿（微信号：ifanr），更多精彩内容第一时间为您奉上。",
+    "published": "2026-11-04",
+    "source": "爱范儿",
+    "id": "e561ff28a63c",
+    "fetched": "2026-11-05T18:17:54",
+    "sources": [
+      "爱范儿"
+    ],
+    "cluster": 1,
+    "also": [],
+    "score": 0.475,
+    "parts": {
+      "track": 0.5,
+      "heat": 0.0,
+      "fresh": 1.0,
+      "verify": 0.5,
+      "shoot": 0.5
+    },
+    "matched": [
+      "AI 工具"
+    ]
+  },
+  {
+    "title": "早报｜国行苹果AI开测，Siri接入千问/中兴否认出售手机业务传闻/多所高校免费发Token",
+    "url": "https://www.ifanr.com/1687477?utm_source=rss&utm_medium=rss&utm_campaign=",
+    "summary": "· GPT 爆改 Qwen 权重，团队测试数学成绩提升约 6 倍 · 盗用 AI 平台算力，上海一男子获刑三年 · 中兴否认出售手机业务传闻 #欢迎关注爱范儿官方微信公众号：爱范儿（微信号：ifanr），更多精彩内容第一时间为您奉上。",
+    "published": "2026-11-04",
+    "source": "爱范儿",
+    "id": "fc831246b0b8",
+    "fetched": "2026-11-05T18:17:54",
+    "sources": [
+      "爱范儿"
+    ],
+    "cluster": 1,
+    "also": [],
+    "score": 0.475,
+    "parts": {
+      "track": 0.5,
+      "heat": 0.0,
+      "fresh": 1.0,
+      "verify": 1.0,
+      "shoot": 0.0
+    },
+    "matched": [
+      "AI 工具"
+    ]
+  },
+  {
+    "title": "连夜实测 iPhone 国行 AI，亮点和槽点都在这了",
+    "url": "https://www.ifanr.com/1687585?utm_source=rss&utm_medium=rss&utm_campaign=",
+    "summary": "后来者总有机会。 #欢迎关注爱范儿官方微信公众号：爱范儿（微信号：ifanr），更多精彩内容第一时间为您奉上。",
+    "published": "2026-11-04",
+    "source": "爱范儿",
+    "id": "1cb32c7f0142",
+    "fetched": "2026-11-05T18:17:54",
+    "sources": [
+      "爱范儿"
+    ],
+    "cluster": 1,
+    "also": [],
+    "score": 0.475,
+    "parts": {
+      "track": 0.5,
+      "heat": 0.0,
+      "fresh": 1.0,
+      "verify": 0.5,
+      "shoot": 0.5
+    },
+    "matched": [
+      "AI 工具"
+    ]
+  },
+  {
+    "title": "早报｜苹果收紧员工Token预算/手机越卖越贵，全球手机出货量降19%/雷军：小米机器人在工厂「实习」8小时",
+    "url": "https://www.ifanr.com/1687750?utm_source=rss&utm_medium=rss&utm_campaign=",
+    "summary": "· 彭博调查：69% 中国受访者至少等到明年才换手机 · ChatGPT 新增 GIF 生成，可调播放速度、逐帧修改 · 近七成汽车经销商试用 AI，部分已设智能体专员 #欢迎关注爱范儿官方微信公众号：爱范儿（微信号：ifanr），更多精彩内容第一时间为您奉上。",
+    "published": "2026-11-05",
+    "source": "爱范儿",
+    "id": "8d787e467c3c",
+    "fetched": "2026-11-05T18:17:54",
+    "sources": [
+      "爱范儿"
+    ],
+    "cluster": 1,
+    "also": [],
+    "score": 0.475,
+    "parts": {
+      "track": 0.5,
+      "heat": 0.0,
+      "fresh": 1.0,
+      "verify": 1.0,
+      "shoot": 0.0
+    },
+    "matched": [
+      "AI 工具"
+    ]
+  },
+  {
+    "title": "派早报：腾讯发布混元 Hy4 正式版，Google 调整 K-12 教育 AI 政策等",
+    "url": "https://sspai.com/post/118498",
+    "summary": "少数派的近期动态全新设计复古设备鼠标垫上架，会员可使用点数兑换。前往选购iPhone少数派共创配件上新，自由选择保护、充电、线缆和支架组合。欢迎选购你可能错过的文章国行Apple智能上手：这些功能已经 ... 查看全文",
+    "published": "2026-11-05",
+    "source": "少数派",
+    "id": "2e2ee958cc99",
+    "fetched": "2026-11-05T18:17:54",
+    "sources": [
+      "少数派"
+    ],
+    "cluster": 1,
+    "also": [],
+    "score": 0.475,
+    "parts": {
+      "track": 0.5,
+      "heat": 0.0,
+      "fresh": 1.0,
+      "verify": 0.5,
+      "shoot": 0.5
+    },
+    "matched": [
+      "AI 工具"
+    ]
+  },
+  {
+    "title": "社区速递 164 | 1500 元圆梦昔日卡皇与派友们做的 AI 平替",
+    "url": "https://sspai.com/post/118317",
+    "summary": "手工压花器、二手 TITAN V，以及派友们用开源项目与 AI Coding 替代付费订阅的讨论。 查看全文",
+    "published": "2026-11-03",
+    "source": "少数派",
+    "id": "5c91822e8d67",
+    "fetched": "2026-11-05T18:17:54",
+    "sources": [
+      "少数派"
+    ],
+    "cluster": 1,
+    "also": [],
+    "score": 0.425,
+    "parts": {
+      "track": 0.5,
+      "heat": 0.0,
+      "fresh": 1.0,
+      "verify": 0.5,
+      "shoot": 0.0
+    },
+    "matched": [
+      "AI 工具"
+    ]
+  },
+  {
+    "title": "A thousand fewer paths to root",
+    "url": "https://openai.com/index/a-thousand-fewer-paths-to-root/",
+    "summary": "Article URL: https://openai.com/index/a-thousand-fewer-paths-to-root/ Comments URL: https://news.ycombinator.com/item?id=50372929 Points: 333 # Comments: 238",
+    "published": "2026-11-04",
+    "source": "Hacker News",
+    "id": "f730feda13ee",
+    "fetched": "2026-11-05T18:18:04",
+    "sources": [
+      "Hacker News"
+    ],
+    "cluster": 1,
+    "also": [],
+    "score": 0.425,
+    "parts": {
+      "track": 0.5,
+      "heat": 0.0,
+      "fresh": 1.0,
+      "verify": 0.5,
+      "shoot": 0.0
+    },
+    "matched": [
+      "AI 工具"
+    ]
+  },
+  {
+    "title": "Anthropic微微发力，AI中转站的天就要塌了？",
+    "url": "https://www.ifanr.com/1687702?utm_source=rss&utm_medium=rss&utm_campaign=",
+    "summary": "就像发邮件加上数字签名一样 #欢迎关注爱范儿官方微信公众号：爱范儿（微信号：ifanr），更多精彩内容第一时间为您奉上。",
+    "published": "2026-11-04",
+    "source": "爱范儿",
+    "id": "f6bf56e951b3",
+    "fetched": "2026-11-05T18:17:54",
+    "sources": [
+      "爱范儿"
+    ],
+    "cluster": 1,
+    "also": [],
+    "score": 0.425,
+    "parts": {
+      "track": 0.5,
+      "heat": 0.0,
+      "fresh": 1.0,
+      "verify": 0.5,
+      "shoot": 0.0
+    },
+    "matched": [
+      "AI 工具"
+    ]
+  },
+  {
+    "title": "Kimi K3.1 Pro model weights are out",
+    "url": "https://huggingface.co/moonshotai/Kimi-K3.1-Pro",
+    "summary": "Article URL: https://huggingface.co/moonshotai/Kimi-K3.1-Pro Comments URL: https://news.ycombinator.com/item?id=50366999 Points: 532 # Comments: 147",
+    "published": "2026-11-04",
+    "source": "Hacker News",
+    "id": "719e9d4cdd9f",
+    "fetched": "2026-11-05T18:18:04",
+    "sources": [
+      "Hacker News"
+    ],
+    "cluster": 1,
+    "also": [],
+    "score": 0.425,
+    "parts": {
+      "track": 0.5,
+      "heat": 0.0,
+      "fresh": 1.0,
+      "verify": 0.5,
+      "shoot": 0.0
+    },
+    "matched": [
+      "AI 工具"
+    ]
+  },
+  {
+    "title": "Launch HN: Kino AI (YC S23) – AI media manager and video editor",
+    "url": "https://news.ycombinator.com/item?id=50368804",
+    "summary": "Hi HN! I'm Luke from Kino ( https://kino.ai ). Kino lets you make great videos with your agents and your teammates. Storage of footage and assets, a rich video editor, and review links for teammates are all bundled into one. Your colleagues and Codex / Claude Code can work on the same timeline with review notes and footage all in one place. See a basic overview at https://kino.ai/walkthrough-video",
+    "published": "2026-11-04",
+    "source": "Hacker News",
+    "id": "2b5f926b26c1",
+    "fetched": "2026-11-05T18:18:04",
+    "sources": [
+      "Hacker News"
+    ],
+    "cluster": 1,
+    "also": [],
+    "score": 0.425,
+    "parts": {
+      "track": 0.5,
+      "heat": 0.0,
+      "fresh": 1.0,
+      "verify": 0.5,
+      "shoot": 0.0
+    },
+    "matched": [
+      "AI 工具"
+    ]
+  },
+  {
+    "title": "OpenAI to acquire Pierre Computer Company",
+    "url": "https://openai.com/index/openai-to-acquire-pierre/",
+    "summary": "https://twitter.com/pierrecomputer/status/211799903617518818... Comments URL: https://news.ycombinator.com/item?id=50366863 Points: 239 # Comments: 73",
+    "published": "2026-11-04",
+    "source": "Hacker News",
+    "id": "647d6f84febf",
+    "fetched": "2026-11-05T18:18:04",
+    "sources": [
+      "Hacker News"
+    ],
+    "cluster": 1,
+    "also": [],
+    "score": 0.425,
+    "parts": {
+      "track": 0.5,
+      "heat": 0.0,
+      "fresh": 1.0,
+      "verify": 0.5,
+      "shoot": 0.0
+    },
+    "matched": [
+      "AI 工具"
+    ]
+  }
+]

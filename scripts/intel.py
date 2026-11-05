@@ -381,18 +381,42 @@ def collapse(items: list[dict], roots: list[int], sizes: list[int]) -> list[dict
     return out
 
 
+def _terms(track: list[str]) -> list[tuple[str, str]]:
+    """把赛道关键词拆成可匹配的词，返回 [(匹配词, 归属的关键词)]。
+
+    为什么拆：身份卡里人会写「AI 工具」这种短语，但标题里只会出现「AI」。
+    只按整串匹配的话，命中率是 0，排序会退化成按热度排——那就等于没有筛。
+    只按空格和常见分隔符拆，不猜中文词边界：拆错比不拆更糟。
+    """
+    out: list[tuple[str, str]] = []
+    for kw in track:
+        kw = (kw or "").strip()
+        if not kw:
+            continue
+        low = kw.lower()
+        out.append((low, kw))
+        for part in re.split(r"[\s、,，/·]+", low):
+            part = part.strip()
+            if len(part) >= 2 and part != low:
+                out.append((part, kw))
+    return out
+
+
 def score_items(items: list[dict], profile: dict | None) -> list[dict]:
     sizes, roots = _cluster(items)
     items = collapse(items, roots, sizes)
     track = [t for t in ((profile or {}).get("track") or []) if t]
+    terms = _terms(track)
     today = date.today()
 
     scored = []
     for it in items:
         text = it.pop("_text", "") or f"{it.get('title','')} {it.get('summary','')}"
+        low = text.lower()
 
-        hits = [t for t in track if t.lower() in text.lower()]
-        track_s = min(1.0, len(hits) / 2) if track else 0.0
+        # 按"命中了几个不同的赛道关键词"算分，同一个词的多种写法不重复计分
+        matched_kw = {kw for term, kw in terms if term in low}
+        track_s = min(1.0, len(matched_kw) / 2) if track else 0.0
 
         heat_s = min(1.0, (it.get("cluster", 1) - 1) / 2)
 
@@ -424,7 +448,7 @@ def score_items(items: list[dict], profile: dict | None) -> list[dict]:
                 "verify": round(verify_s, 2),
                 "shoot": round(shoot_s, 2),
             },
-            "matched": hits,
+            "matched": sorted(matched_kw),
         })
 
     scored.sort(key=lambda x: (-x["score"], x.get("published", ""), x.get("title", "")))
@@ -474,6 +498,13 @@ def cmd_rank(args) -> int:
     track = "、".join((profile or {}).get("track") or []) or "（未设置身份卡）"
     goal = (profile or {}).get("goal") or "—"
     who = ((profile or {}).get("audience") or {}).get("who") or "—"
+    blind = bool((profile or {}).get("track")) and not any(
+        it["parts"]["track"] > 0 for it in scored
+    )
+    if blind:
+        print(f"警告：一条都没命中赛道关键词「{track}」。", file=sys.stderr)
+        print("      这份排序等于只按热度和时效排的，跟你的账号没关系。", file=sys.stderr)
+        print("      改法：track 换成标题里真会出现的词，或换几家更贴赛道的源。", file=sys.stderr)
 
     lines = [
         f"# 选题候选 · {date.today().isoformat()}",
@@ -483,6 +514,15 @@ def cmd_rank(args) -> int:
         "",
         f"情报库 {len(items)} 条，取前 {len(top)} 条。",
         "",
+    ]
+    if blind:
+        lines += [
+            f"> ⚠️ **一条都没命中赛道关键词「{track}」。**",
+            "> 下面的排序只反映了热度和时效，跟你的账号没有关系。",
+            "> 先改 `profile.json` 的 `track`（换成标题里真会出现的词），或换几家更贴赛道的源，再重新 rank。",
+            "",
+        ]
+    lines += [
         "> **这张表是排序建议，不是结论。** 打分只用了五个能算的客观特征：",
         f"> 赛道匹配 {int(WEIGHTS['track']*100)}%、热度 {int(WEIGHTS['heat']*100)}%、"
         f"时效 {int(WEIGHTS['fresh']*100)}%、可验证 {int(WEIGHTS['verify']*100)}%、"
