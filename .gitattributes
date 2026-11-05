@@ -13,6 +13,10 @@
 *.yaml text eol=lf
 *.yml text eol=lf
 
+# 许可原文逐字节保留，不做任何行尾转换：
+# GitHub 的许可证识别依赖正文与官方 legalcode 完全一致，差一个字节就识别不出来。
+LICENSE -text
+
 # 二进制，别做行尾转换
 *.png binary
 *.jpg binary
