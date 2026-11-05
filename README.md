@@ -10,7 +10,7 @@
 
 ## 完整链路
 
-九段，每段都有固定的输入输出。上游三段的产出决定下游值不值得做，所以它们不是可选项。
+十段，每段都有固定的输入输出。上游三段的产出决定下游值不值得做，所以它们不是可选项。
 
 | # | 阶段 | 谁做 | 输入 | 输出 | 命令 |
 |---|---|---|---|---|---|
@@ -18,17 +18,19 @@
 | 2 | 情报 | 脚本抓、人或 agent 喂 | RSS/Atom 源、手工条目 | `intel/raw.jsonl` | `intel fetch` / `intel add` |
 | 3 | 选题 | **脚本排序，人做判断** | 情报库 + 身份卡 | `00-intel/选题候选.md`、`选题卡.md` | `intel rank` / `topic pick` |
 | 4 | 脚本 | 人或专家 | 选题卡 | `01-script/script.md` | — |
-| 5 | 素材 | 人 | 脚本，或已有实拍 | `02-raw/main.mp4`（+ `cut.mp4`） | — |
-| 6 | 转写切点 | 脚本 | 素材 | `transcript.json`、`切点对照表.md` | `ingest` / `cut` |
-| 7 | 草稿 | 脚本 | 切点表 + 画面计划 | 剪映草稿、`plan.json` | `build` |
-| 8 | 分发 | 脚本 | 草稿 + 平台规则 | 四平台发布稿、检查表 | `verify` / `pack` |
-| 9 | 复盘 | 脚本聚合，人决策 | 各平台后台数据 | `metrics.csv`、降权/首发建议 | `metrics` |
+| 5 | 预估 | 脚本体检、人看结论 | 脚本 + 你的历史数据 | `06-publish/预估.md` | `forecast` |
+| 6 | 素材 | 人 | 脚本，或已有实拍 | `02-raw/main.mp4`（+ `cut.mp4`） | — |
+| 7 | 转写切点 | 脚本 | 素材 | `transcript.json`、`切点对照表.md` | `ingest` / `cut` |
+| 8 | 草稿 | 脚本 | 切点表 + 画面计划 | 剪映草稿、`plan.json` | `build` |
+| 9 | 分发 | 脚本 | 草稿 + 平台规则 | 四平台发布稿、检查表 | `verify` / `pack` |
+| 10 | 复盘 | 脚本聚合，人决策 | 各平台后台数据 | `metrics.csv`、降权/首发建议 | `metrics` |
 
-三段的分界线要说清，否则容易用错：
+几段的分界线要说清，否则容易用错：
 
 - **身份决定情报筛什么。** 赛道关键词是打分里权重最高的一项（35%）。不写身份，抓回来的东西只能按「新」和「热」排，等于没有筛。
 - **脚本排序，人做判断。** `intel rank` 只算五个能算的客观特征：赛道匹配、热度、时效、可验证、可拍。「反常识」「值不值得做」是语义判断，机器算不出来，硬算就是假装有结论。
 - **`topic pick` 不做决定，只做归位。** 它把候选落成一张按模板排好的选题卡，**四栏是空的**。填不填、做不做、要不要换角度，是人写上去的。
+- **`forecast` 不是播放量预测。** 它只做两件事：把脚本拆成钩子/结构/密度/平台适配四项做体检，再拿**你自己账号**的历史中位数按结构分上下浮动。没有 ≥3 条历史数据就不给绝对数字——拿「新号一般几百播放」凑一个数，看起来像预测，实际是猜。
 
 同一条情报被多家媒体报道时，`intel rank` 会合并成一条并标出「N 个源在说同一件事」——不合并的话，候选表前三行就是同一条内容，去重的工作又推回给人了。
 
@@ -43,9 +45,10 @@ python scripts/pipeline.py intel  add   . --title "..."      # 手工/agent 喂�
 python scripts/pipeline.py intel  rank  .                    # 五项特征打分排序
 python scripts/pipeline.py topic  pick  . 1                  # 落成选题卡（四栏留空，自己填）
 
-# 下游：脚本 -> 素材 -> 粗剪 -> 草稿 -> 发布 -> 复盘
+# 下游：脚本 -> 预估 -> 素材 -> 粗剪 -> 草稿 -> 发布 -> 复盘
 python scripts/pipeline.py doctor          # 环境和剪映草稿库自检
 python scripts/pipeline.py init   <目录> --name 第01期
+python scripts/pipeline.py forecast <目录>  # 结构体检 + 历史基线外推（不是播放量预测）
 python scripts/pipeline.py ingest <目录>   # 转写 + 音轨标准化
 python scripts/pipeline.py cut    <目录>   # 算切点
 python scripts/pipeline.py build  <目录>   # 铺画面 + 出草稿
@@ -87,6 +90,7 @@ tiger-video-expert/
 │   ├── pipeline.py             # 单入口 CLI，把下面几步串起来
 │   ├── profile.py              # 身份卡：校验必填项，生成人读版
 │   ├── intel.py                # 情报：抓取、去重合并、五项打分、落选题卡
+│   ├── forecast.py             # 预估：结构体检 + 历史基线外推（不给假数字）
 │   ├── draft_compat.py         # 剪映草稿库兼容层（布局探测 / 写对文件名 / 修元信息）
 │   ├── audio.py                # 高通 + 降噪 + 两遍 loudnorm 到 -14 LUFS
 │   ├── transcribe.py           # 视频 -> 逐字转写（抽音轨 + faster-whisper + SRT）
@@ -119,7 +123,7 @@ tiger-video-expert/
 ├── 03-transcript/   transcript.json、voice.srt、voice_std.wav
 ├── 04-cut/          cutlist.json、切点对照表.md
 ├── 05-plan/         plan.json、B-roll待补清单.md
-├── 06-publish/      post.json、四个平台稿、发布前检查.md
+├── 06-publish/      post.json、预估.md、四个平台稿、发布前检查.md
 └── 07-metrics/      metrics.csv
 ```
 

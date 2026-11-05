@@ -306,7 +306,26 @@ def main() -> int:
         p = run([PY, str(HERE / "pipeline.py"), "verify", str(proj)])
         check("verify 通过", p.returncode == 0, p.stdout[-600:] + p.stderr[-300:])
 
-        print("\n[8] pack")
+        print("\n[8] forecast")
+        (proj / "01-script").mkdir(exist_ok=True)
+        (proj / "01-script" / "script.md").write_text(
+            "---\ntype: 脚本\n字数: 300\n预计时长: 67s\n---\n\n"
+            "为什么你的片子没人看完？不是设备问题。\n\n"
+            "但是真正的原因在切点。我们实测了 12 条片子，前 3 秒流失 62%。\n\n"
+            "所以结论很简单：先修开场，再修其他。\n",
+            encoding="utf-8")
+        p = run([PY, str(HERE / "pipeline.py"), "forecast", str(proj)])
+        check("forecast 退出码 0", p.returncode == 0, p.stderr[-400:])
+        fb = proj / "06-publish" / "预估.md"
+        check("预估.md 生成", fb.exists())
+        if fb.exists():
+            txt = fb.read_text(encoding="utf-8")
+            check("报告开头就写明不是播放量预测", "这不是播放量预测" in txt)
+            check("用了脚本声明的时长而不是数全文", "67 秒" in txt, txt[txt.find("脚本："):][:60])
+            check("数据不足时不给绝对数字", "数据不够，不给数字" in txt)
+            check("给出结构分与系数", "调整系数" in txt)
+
+        print("\n[9] pack")
         (proj / "06-publish").mkdir(exist_ok=True)
         (proj / "06-publish" / "post.json").write_text(
             json.dumps(POST, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -316,11 +335,11 @@ def main() -> int:
             check(f"{plat}.md", (proj / "06-publish" / f"{plat}.md").exists())
         check("发布前检查.md", (proj / "06-publish" / "发布前检查.md").exists())
 
-        print("\n[9] status")
+        print("\n[10] status")
         p = run([PY, str(HERE / "pipeline.py"), "status", str(proj)])
         check("status 退出码 0", p.returncode == 0)
 
-        print("\n[10] doctor")
+        print("\n[11] doctor")
         p = run([PY, str(HERE / "pipeline.py"), "doctor", "--draft-root", str(drafts)])
         check("doctor 退出码 0", p.returncode == 0, p.stderr[-400:])
         if p.returncode == 0:

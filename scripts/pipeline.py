@@ -8,13 +8,14 @@
     python pipeline.py intel     rank    <项目目录>
     python pipeline.py topic     pick    <项目目录> 1
 
-    # 下游：脚本 -> 素材 -> 粗剪 -> 草稿 -> 发布 -> 复盘
+    # 下游：脚本 -> 预估 -> 素材 -> 粗剪 -> 草稿 -> 发布 -> 复盘
     python pipeline.py init      <项目目录> --name 第01期
     python pipeline.py doctor
     python pipeline.py ingest    <项目目录>
     python pipeline.py cut       <项目目录>
     python pipeline.py build     <项目目录>
     python pipeline.py verify    <项目目录>
+    python pipeline.py forecast  <项目目录>
     python pipeline.py pack      <项目目录>
     python pipeline.py metrics   log <项目目录> --platform douyin --views 12000 --completion 42%
     python pipeline.py metrics   report --all .
@@ -509,6 +510,12 @@ def cmd_topic(args) -> int:
     return intel_mod.main(rest)
 
 
+def cmd_forecast(args) -> int:
+    """发布前预估：结构体检 + 历史基线外推。不是播放量预测。"""
+    import forecast as forecast_mod
+    return forecast_mod.main(args.rest)
+
+
 # ---------------------------------------------------------------- metrics
 
 def cmd_metrics(args) -> int:
@@ -557,6 +564,7 @@ def cmd_status(args) -> int:
         ("情报", ws / intel_mod.INTEL_DIR / intel_mod.RAW_FILE, "pipeline.py intel fetch .", True),
         ("选题", root / DIRS["intel"] / intel_mod.TOPIC_CARD, "pipeline.py topic pick . 1", True),
         ("脚本", root / DIRS["script"] / "script.md", "写脚本放进来", False),
+        ("预估", root / DIRS["publish"] / "预估.md", "pipeline.py forecast .", False),
         ("素材", root / DIRS["raw"] / "main.mp4", "把主素材放进来", True),
         ("转写", root / DIRS["transcript"] / "transcript.json", "pipeline.py ingest .", True),
         ("切点", root / DIRS["cut"] / "cutlist.json", "pipeline.py cut .", True),
@@ -594,7 +602,7 @@ def cmd_status(args) -> int:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="pipeline",
-        description="全链路内容流水线：身份 -> 情报 -> 选题 -> 脚本 -> 素材 -> 粗剪 -> 草稿 -> 发布稿 -> 复盘",
+        description="全链路内容流水线：身份 -> 情报 -> 选题 -> 脚本 -> 预估 -> 素材 -> 粗剪 -> 草稿 -> 发布稿 -> 复盘",
     )
     sub = parser.add_subparsers(dest="cmd", required=True)
 
@@ -645,6 +653,10 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("pack", help="生成多平台发布稿")
     p.add_argument("dir")
     p.set_defaults(func=cmd_pack)
+
+    p = sub.add_parser("forecast", help="发布前预估：结构体检 + 历史基线外推")
+    p.add_argument("rest", nargs=argparse.REMAINDER)
+    p.set_defaults(func=cmd_forecast)
 
     p = sub.add_parser("metrics", help="数据回填与迭代")
     p.add_argument("rest", nargs=argparse.REMAINDER)
